@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+    <h2>todo</h2>
+    <input type="text" v-model="task" /> <button v-on:click="createTasks()" >Add Task</button>
+    {{task}}
+
+    <hr />
+    <h3>Tasks</h3>
+    <ul>
+            
+            <li v-for="todo in todos">{{ todo.task }} <a href="#" v-on:click="deleteTask(todo.id)">Delete</a></li>
+    </ul>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el:'#app',
+            data: {
+                task: '',
+                toods:[]
+
+            },
+            methods:{
+                deleteTask(id){
+                    alert(id);
+                },
+                createTask(){
+                    axios.port('http://127.0.0.1:8000/api/todo',{task: this.task}).then(response => {
+                    this.task = '';
+                    this.getTasks();
+                    });
+                },
+                getTasks() {
+                    axios.get('http://127.0.0.1:8000/api/todo').then(response => {
+                        this.todos = response.data;
+                    })
+                }
+            }
+
+        });
+    </script> 
+</body>
+</html>
